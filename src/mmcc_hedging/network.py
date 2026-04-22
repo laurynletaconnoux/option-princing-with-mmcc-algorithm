@@ -27,17 +27,21 @@ class MLPPolicy(nn.Module):
 
     def __init__(self, params: NetworkParams | None = None) -> None:
         super().__init__()
-        self.params = params or NetworkParams()
-        layer_sizes = (
+        self.params = params or NetworkParams() # Use default parameters if none are provided.
+
+        layer_sizes = [ 
             self.params.input_dim,
             *self.params.hidden_sizes,
             self.params.output_dim,
-        )
-        layers: list[nn.Module] = []
-        for in_features, out_features in zip(layer_sizes[:-2], layer_sizes[1:-1]):
-            layers.append(nn.Linear(in_features, out_features))
-            layers.append(nn.ReLU())
-        layers.append(nn.Linear(layer_sizes[-2], layer_sizes[-1]))
+        ] # List of layer sizes, including input, hidden, and output layers.
+
+        layers = [] # List to hold the layers of the network.
+
+        for i in range(len(layer_sizes) - 2): # Loop through the hidden layers (excluding the output layer)
+            layers.append(nn.Linear(layer_sizes[i], layer_sizes[i + 1]))
+            layers.append(nn.ReLU()) # Activation function after each hidden layer
+
+        layers.append(nn.Linear(layer_sizes[-2], layer_sizes[-1])) # Linear layer for the output
         self.net = nn.Sequential(*layers)
 
     def forward(self, features: Tensor) -> Tensor:
@@ -64,10 +68,17 @@ class DatePolicies(nn.Module):
 
     def __init__(self, num_steps: int, params: NetworkParams | None = None) -> None:
         super().__init__()
+
         if num_steps < 2:
-            raise ValueError("num_steps must be at least 2.")
-        self.num_steps = num_steps
-        self.policies = nn.ModuleList([MLPPolicy(params) for _ in range(num_steps - 1)])
+            raise ValueError("num_steps must be at least 2.") # We need at least two steps to have a non-trivial policy (one for t_1, ..., t_{N-1}).
+
+        self.num_steps = num_steps 
+
+        policies = []
+        for _ in range(num_steps - 1):
+            policies.append(MLPPolicy(params)) # Create a separate MLPPolicy for each date t_1, ..., t_{N-1}.
+
+        self.policies = nn.ModuleList(policies)
 
     def policy(self, time_index: int) -> MLPPolicy:
         """Return the policy associated with t_1, ..., t_{N-1}."""
