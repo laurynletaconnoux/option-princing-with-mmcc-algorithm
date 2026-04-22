@@ -11,6 +11,8 @@ from mmcc_hedging.params import (
     NetworkParams,
     TrainingParams,
 )
+from mmcc_hedging.visualization import Visualizer
+from mmcc_hedging.visualization_2 import Visualizer2
 
 __all__ = [
     "AsianOptionParams",
@@ -27,6 +29,8 @@ __all__ = [
     "MMCCTrainer",
     "MLPPolicy",
     "NetworkParams",
+    "Visualizer",
+    "Visualizer2",
     "TrainingParams",
     "evaluate",
     "hedging_loss",

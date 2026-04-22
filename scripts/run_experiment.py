@@ -29,6 +29,7 @@ from mmcc_hedging import (  # noqa: E402
     MMCCTrainer,
     NetworkParams,
     TrainingParams,
+    Visualizer2,
 )
 
 
@@ -84,7 +85,7 @@ def main() -> None:
         baseline_policies,
         training_params,
     )
-    baseline.train()
+    baseline_losses = baseline.train()
     print_metrics("Baseline evaluation", baseline.evaluate())
 
     print("\nRunning MMCC")
@@ -92,8 +93,30 @@ def main() -> None:
     mmcc_initial = InitialControl()
     mmcc_policies = DatePolicies(heston_params.num_steps, network_params)
     mmcc = MMCCTrainer(env, mmcc_initial, mmcc_policies, training_params)
-    mmcc.train()
+    mmcc_history = mmcc.train()
     print_metrics("MMCC evaluation", mmcc.evaluate())
+
+    eval_paths = market.simulate(
+        training_params.evaluation_num_paths,
+        seed=training_params.evaluation_seed,
+    )
+    baseline_trajectory = env.rollout(eval_paths, baseline_initial, baseline_policies)
+    mmcc_trajectory = env.rollout(eval_paths, mmcc_initial, mmcc_policies)
+
+    visualizer2 = Visualizer2(output_dir=Path("outputs"))
+    visualizer2.plot_policy_evolution(
+        baseline_trajectory,
+        mmcc_trajectory,
+        num_paths_to_plot=30,
+    )
+    visualizer2.plot_hedging_error(
+        baseline_trajectory,
+        mmcc_trajectory,
+    )
+    visualizer2.plot_convergence(
+        baseline_losses,
+        mmcc_history,
+    )
 
 
 if __name__ == "__main__":

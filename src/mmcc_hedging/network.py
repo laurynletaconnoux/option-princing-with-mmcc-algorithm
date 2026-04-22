@@ -136,3 +136,4 @@ class InitialControl(nn.Module):
             premium=self.premium.expand(num_paths),
             position=self.position.expand(num_paths),
         )
+

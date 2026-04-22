@@ -2,3 +2,4 @@ torch>=2.0,<2.3; platform_system == "Darwin" and platform_machine == "x86_64" #A
 torch>=2.0; platform_system != "Darwin" or platform_machine != "x86_64"
 numpy>=1.26,<2
 pytest>=8.0
+matplotlib>=3.8
