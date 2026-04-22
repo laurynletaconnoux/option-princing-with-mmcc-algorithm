@@ -83,6 +83,12 @@ class NetworkParams:
     hidden_sizes: tuple[int, ...] = (64, 64)
     output_dim: int = 1
 
+    spot_scale: float = 100.0
+    variance_scale: float = 0.04
+    average_scale: float = 100.0
+    position_scale: float = 1.0
+    cash_scale: float = 100.0
+
     def __post_init__(self) -> None:
         if self.input_dim <= 0:
             raise ValueError("input_dim must be positive.")
@@ -90,6 +96,17 @@ class NetworkParams:
             raise ValueError("output_dim must be positive.")
         if any(size <= 0 for size in self.hidden_sizes):
             raise ValueError("hidden_sizes must contain positive integers.")
+
+        if self.spot_scale <= 0.0:
+            raise ValueError("spot_scale must be positive.")
+        if self.variance_scale <= 0.0:
+            raise ValueError("variance_scale must be positive.")
+        if self.average_scale <= 0.0:
+            raise ValueError("average_scale must be positive.")
+        if self.position_scale <= 0.0:
+            raise ValueError("position_scale must be positive.")
+        if self.cash_scale <= 0.0:
+            raise ValueError("cash_scale must be positive.")
 
 
 @dataclass(frozen=True, slots=True)

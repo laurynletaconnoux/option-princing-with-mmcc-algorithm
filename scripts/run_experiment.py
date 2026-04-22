@@ -11,12 +11,6 @@ import sys
 
 import torch
 
-
-ROOT = Path(__file__).resolve().parents[1]
-SRC = ROOT / "src"
-if str(SRC) not in sys.path:
-    sys.path.insert(0, str(SRC))
-
 from mmcc_hedging import (  # noqa: E402
     AsianOptionParams,
     BaselineTrainer,
@@ -49,28 +43,40 @@ def main() -> None:
         initial_variance=0.04,
         risk_free_rate=0.02,
         maturity=1.0,
-        num_steps=4,
+        num_steps=20,
     )
+
     option_params = AsianOptionParams(
         strike=100.0,
         maturity=heston_params.maturity,
         num_monitoring_dates=heston_params.num_steps,
     )
+
     hedging_params = HedgingParams(transaction_cost=0.001)
-    network_params = NetworkParams(hidden_sizes=(16, 16))
-    training_params = TrainingParams(
-        num_iterations=1,
-        num_paths=64,
-        batch_size=32,
-        num_epochs_per_date=2,
-        num_epochs_initial_control=2,
-        baseline_epochs=3,
-        evaluation_num_paths=64,
-        learning_rate=1e-3,
-        seed=123,
-        evaluation_seed=456,
-        verbose=True,
+
+    network_params = NetworkParams(
+    hidden_sizes=(64, 64),
+    spot_scale=heston_params.initial_spot,
+    variance_scale=heston_params.theta,
+    average_scale=option_params.strike,
+    position_scale=1.0,
+    cash_scale=option_params.strike,
     )
+
+    training_params = TrainingParams(
+    num_iterations=20,
+    num_paths=10000,
+    batch_size=1024,
+    num_epochs_per_date=60,
+    num_epochs_initial_control=60,
+    baseline_epochs=150,
+    evaluation_num_paths=30000,
+    learning_rate=5e-4,
+    seed=223,
+    evaluation_seed=459,
+    verbose=True,
+    )
+
 
     market = HestonModel(heston_params)
     env = HedgingEnvironment(market, option_params, hedging_params)
@@ -117,6 +123,10 @@ def main() -> None:
         baseline_losses,
         mmcc_history,
     )
+
+    print("\nLearned initial control")
+    print(f"  y  = {mmcc_initial.premium.detach().item():.6f}")
+    print(f"  q0 = {mmcc_initial.position.detach().item():.6f}")
 
 
 if __name__ == "__main__":
