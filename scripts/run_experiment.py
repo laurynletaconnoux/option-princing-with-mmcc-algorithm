@@ -40,10 +40,10 @@ def main() -> None:
 
     heston_params = HestonParams(
         initial_spot=100.0,
-        initial_variance=0.04,
-        risk_free_rate=0.02,
+        initial_variance=0.0225,
+        risk_free_rate=0.05,
         maturity=1.0,
-        num_steps=20,
+        num_steps=12,
     )
 
     option_params = AsianOptionParams(
@@ -64,14 +64,14 @@ def main() -> None:
     )
 
     training_params = TrainingParams(
-    num_iterations=20,
+    num_iterations=200,
     num_paths=10000,
     batch_size=1024,
-    num_epochs_per_date=60,
-    num_epochs_initial_control=60,
+    num_epochs_per_date=80,
+    num_epochs_initial_control=80,
     baseline_epochs=150,
     evaluation_num_paths=30000,
-    learning_rate=5e-4,
+    learning_rate=3e-4, # un taux plus bas, si ça oscille
     seed=223,
     evaluation_seed=459,
     verbose=True,

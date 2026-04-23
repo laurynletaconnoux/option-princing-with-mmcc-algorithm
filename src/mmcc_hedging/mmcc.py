@@ -15,7 +15,7 @@ from mmcc_hedging.params import TrainingParams
 
 
 def hedging_loss(terminal_wealth: Tensor, payoff: Tensor) -> Tensor:
-    """Return E[(W_N - H)^2] estimated by a Monte Carlo average."""
+    """Return E[(Y_N - g(.))^2] estimated by a Monte Carlo average."""
 
     return torch.mean((terminal_wealth - payoff) ** 2)
 

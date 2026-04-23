@@ -40,7 +40,7 @@ class HedgingTrajectory:
 
     @property
     def hedging_error(self) -> Tensor:
-        """Return W_N - H path by path."""
+        """Return Y_N - g(.) path by path."""
 
         return self.terminal_wealth - self.payoff
 

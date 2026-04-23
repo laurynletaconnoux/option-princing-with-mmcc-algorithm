@@ -9,7 +9,7 @@ from torch import Tensor, nn
 
 from mmcc_hedging.params import NetworkParams
 
-
+     
 def state_features(
     time_index: int,
     spot: Tensor,
@@ -67,7 +67,7 @@ class MLPPolicy(nn.Module):
 
         for i in range(len(layer_sizes) - 2): # Loop through the hidden layers (excluding the output layer)
             layers.append(nn.Linear(layer_sizes[i], layer_sizes[i + 1]))
-            layers.append(nn.ReLU()) # Activation function after each hidden layer
+            layers.append(nn.SiLU()) # Activation function after each hidden layer
 
         layers.append(nn.Linear(layer_sizes[-2], layer_sizes[-1])) # Linear layer for the output
         self.net = nn.Sequential(*layers)
@@ -146,7 +146,7 @@ class DatePolicies(nn.Module):
 class InitialControlOutput:
     """Batched initial premium y and initial inventory q_0."""
 
-    premium: Tensor
+    premium: Tensor #premium correpsond à y ?
     position: Tensor
 
 
