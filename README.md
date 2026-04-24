@@ -11,7 +11,7 @@ main implementation lives in a few files under `src/mmcc_hedging/`.
 The goal is to minimize the quadratic hedging error
 
 ```text
-E[(W_N - H)^2]
+E[(Y_N - g)^2]
 ```
 
 where `H` is the payoff of a discretely monitored Asian call and `W_N` is the
@@ -26,7 +26,7 @@ The Asian running sum is
 ```text
 A_0 = 0
 A_{n+1} = A_n + S_{n+1}
-H = max(A_N / N - K, 0)
+g = max(A_N / N - K, 0)
 ```
 
 The pre-trade state is
