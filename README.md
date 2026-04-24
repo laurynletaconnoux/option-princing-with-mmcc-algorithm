@@ -32,13 +32,13 @@ H = max(A_N / N - K, 0)
 The pre-trade state is
 
 ```text
-s_n = (S_n, V_n, A_n, q_{n-1}, B_n)
+s_n = (S_n, V_n, A_n, Q_{n-1}, B_n)
 ```
 
 At `t_0`, the control is separate:
 
 ```text
-c_0 = (y, q_0)
+c_0 = (y_0, q_0)
 ```
 
 For dates `t_1, ..., t_{N-1}`, there is one MLP policy network per date.
@@ -100,8 +100,8 @@ hedging error diagnostics. For real experiments, increase `num_steps`,
 - Risk-neutral Heston simulation.
 - Discretely monitored Asian call payoff.
 - Proportional transaction costs.
-- Augmented state `(S, V, A, q, B)`.
-- Separate learnable initial control `(y, q_0)`.
+- Augmented state `(S, V, A, Q, B)`.
+- Separate learnable initial control `(y_0, q_0)`.
 - One MLP policy per rebalancing date.
 - Joint baseline training.
 - MMCC backward date-by-date updates with Adam.
