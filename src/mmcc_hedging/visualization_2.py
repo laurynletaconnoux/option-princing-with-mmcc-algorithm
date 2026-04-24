@@ -117,7 +117,7 @@ class Visualizer2:
         )
 
         ax.set_title(title)
-        ax.set_xlabel("Time")
+        ax.set_xlabel("Time (t/T)")
         ax.set_ylabel("Target position $q_n$")
         ax.legend(fontsize=8)
         ax.grid(alpha=0.25)
@@ -284,14 +284,15 @@ class Visualizer2:
         ax_base.plot(epochs, baseline_losses, color="steelblue",
                      linewidth=1.8, marker="o", markersize=4, label="MSE loss")
         ax_base.set_title("Baseline – convergence")
-        ax_base.set_xlabel("Epoch")
+        ax_base.set_xlabel("Iteration")
         ax_base.set_ylabel("MSE loss")
+        ax_base.set_ylim(bottom=0)
         ax_base.legend(fontsize=8)
         ax_base.grid(alpha=0.25)
 
         # ── MMCC ─────────────────────────────────────────────────────────
         if mmcc_history:
-            iters = np.array([log.iteration + 1 for log in mmcc_history])
+            iters = np.array([log.iteration for log in mmcc_history])
             pre   = np.array([log.pre_loss   for log in mmcc_history])
             post  = np.array([log.post_loss  for log in mmcc_history])
 
@@ -312,6 +313,7 @@ class Visualizer2:
         ax_mmcc.set_title("MMCC – convergence")
         ax_mmcc.set_xlabel("Iteration")
         ax_mmcc.set_ylabel("MSE loss")
+        ax_mmcc.set_ylim(bottom=0)
         ax_mmcc.legend(fontsize=7)
         ax_mmcc.grid(alpha=0.25)
 
@@ -322,3 +324,4 @@ class Visualizer2:
         fig.savefig(out_path, dpi=160, bbox_inches="tight")
         plt.close(fig)
         print(f"[Visualizer2] Figure saved: {out_path}")
+

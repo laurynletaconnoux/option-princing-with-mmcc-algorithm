@@ -71,7 +71,7 @@ def main() -> None:
     num_epochs_initial_control=300,
     baseline_epochs=150,
     evaluation_num_paths=100000,
-    learning_rate=1e-2,
+    learning_rate=7e-3,
     seed=223,
     evaluation_seed=459,
     verbose=True,
