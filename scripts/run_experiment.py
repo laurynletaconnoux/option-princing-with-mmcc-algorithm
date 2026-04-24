@@ -55,7 +55,7 @@ def main() -> None:
     hedging_params = HedgingParams(transaction_cost=0.001)
 
     network_params = NetworkParams(
-    hidden_sizes=(64, 64),
+    hidden_sizes=(70, 70),
     spot_scale=heston_params.initial_spot,
     variance_scale=heston_params.theta,
     average_scale=option_params.strike,
@@ -64,14 +64,14 @@ def main() -> None:
     )
 
     training_params = TrainingParams(
-    num_iterations=200,
-    num_paths=10000,
-    batch_size=1024,
-    num_epochs_per_date=80,
-    num_epochs_initial_control=80,
+    num_iterations=10,
+    num_paths=30000,
+    batch_size=4096,
+    num_epochs_per_date=300,
+    num_epochs_initial_control=300,
     baseline_epochs=150,
-    evaluation_num_paths=30000,
-    learning_rate=3e-4, # un taux plus bas, si ça oscille
+    evaluation_num_paths=100000,
+    learning_rate=1e-2,
     seed=223,
     evaluation_seed=459,
     verbose=True,

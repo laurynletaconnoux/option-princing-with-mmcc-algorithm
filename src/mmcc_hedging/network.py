@@ -67,7 +67,7 @@ class MLPPolicy(nn.Module):
 
         for i in range(len(layer_sizes) - 2): # Loop through the hidden layers (excluding the output layer)
             layers.append(nn.Linear(layer_sizes[i], layer_sizes[i + 1]))
-            layers.append(nn.SiLU()) # Activation function after each hidden layer
+            layers.append(nn.ReLU()) # Activation function after each hidden layer
 
         layers.append(nn.Linear(layer_sizes[-2], layer_sizes[-1])) # Linear layer for the output
         self.net = nn.Sequential(*layers)

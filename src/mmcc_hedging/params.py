@@ -84,7 +84,7 @@ class NetworkParams:
     output_dim: int = 1
 
     spot_scale: float = 100.0
-    variance_scale: float = 0.04
+    variance_scale: float = 0.0225
     average_scale: float = 100.0
     position_scale: float = 1.0
     cash_scale: float = 100.0
