@@ -1,10 +1,8 @@
 # MMCC Dynamic Hedging
 
-Readable Python/PyTorch implementation of a finite-horizon dynamic hedging
-problem with transaction costs, intended for an ENSAE-style research project.
-
-The code favors mathematical transparency over production architecture: the
-main implementation lives in a few files under `src/mmcc_hedging/`.
+Apply the MMCC algorithm to a challenging high-dimensional, path-dependent financial 
+problem over a finite-horizon. In particular, we study the dynamic hedging of an Asian 
+option under a stochastic volatility model with proportional transaction costs.
 
 ## Mathematical Problem
 
@@ -14,7 +12,7 @@ The goal is to minimize the quadratic hedging error
 E[(Y_N - g)^2]
 ```
 
-where `H` is the payoff of a discretely monitored Asian call and `W_N` is the
+where `g` is the payoff of a discretely Asian call and `Y_N` is the
 terminal wealth of a self-financing portfolio with proportional transaction
 costs.
 
